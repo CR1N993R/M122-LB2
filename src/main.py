@@ -1,4 +1,5 @@
 import sys
+
 from src.alphaVantage import *
 
 timePeriod = ""
@@ -12,7 +13,7 @@ ftpPassword = ""
 
 def check_args():
     if len(timePeriod) > 0 and len(stockName) > 0:
-        print(getDescription(stockName))
+        #print(getDescription(stockName))
         (getStockData(stockName))
     else:
         print("Missing Argument -t or -a")

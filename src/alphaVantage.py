@@ -15,5 +15,7 @@ def getStockData(stock_name):
     conn.request("GET", "/query?function=TIME_SERIES_DAILY&symbol=" + stock_name + "&apikey=$FXI1M9JI1IYPL04R")
     data = conn.getresponse().read().decode("utf-8")
     data = json.loads(data)
-    print(data["Time Series (Daily)"]["2022-04-08"]["1. open"])
+    print(list(data.keys())[0])
+    for datum in data["Time Series (Daily)"]:
+        print(data["Time Series (Daily)"][datum])
     return data
