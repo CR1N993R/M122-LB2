@@ -1,0 +1,25 @@
+def generate_new_page(pdf, text, stock_name, name, rising, percentage, diff):
+    pdf.add_page()
+    pdf.set_xy(0, 20)
+    pdf.set_font("arial", "B", 26)
+    pdf.cell(20)
+    pdf.cell(40, 10, stock_name, 0, 2)
+    pdf.set_font("arial", "B", 16)
+    pdf.cell(10, 6, "", 0, 2)
+    pdf.cell(40, 10, name, 0, 2)
+    pdf.set_font("arial", "B", 14)
+    if rising:
+        pdf.set_text_color(0, 255, 0)
+        pdf.cell(40, 10, "+" + str(percentage) + " (+ " + str(diff) + ")", 0, 2)
+        pdf.image("../img/up.png", 25, 60, 6, 10)
+    else:
+        pdf.set_text_color(255, 0, 0)
+        pdf.cell(40, 10, str(percentage) + " (" + str(diff) + ")", 0, 2)
+        pdf.image("../img/down.png", 25, 60, 6, 10)
+    pdf.set_font("arial", "", 14)
+    pdf.set_text_color(0, 0, 0)
+    pdf.cell(20, 16, "", 0, 2)
+    pdf.multi_cell(170, 5, text)
+    pdf.cell(20, 10, "", 0, 2)
+    pdf.image("stock.png", x=20, y=None, w=170, h=100, type="", link="")
+
