@@ -7,10 +7,11 @@ def send_request(args, stock_name):
     conn = http.client.HTTPSConnection("www.alphavantage.co")
     conn.request("GET", "/query?" + args + "&symbol=" + stock_name + "&apikey=$FXI1M9JI1IYPL04R")
     data = conn.getresponse().read().decode("utf-8")
+    data = json.loads(data)
     if "Note" in data:
         sleep(61)
         return send_request(args, stock_name)
-    return json.loads(data)
+    return data
 
 
 def get_description(stock_name):
