@@ -10,6 +10,7 @@ def print_bars(plt, index, close, high, low, open, stick1, stick2, body):
 
 
 def create_graph(data, company):
+    print("Generating graph for company: " + company + "...")
     prices = pd.DataFrame.from_dict(data, "index")
     prices["1. open"] = prices["1. open"].astype(float)
     prices["2. high"] = prices["2. high"].astype(float)
@@ -30,3 +31,4 @@ def create_graph(data, company):
     fig.set_size_inches(17, 10)
 
     plt.savefig(company + ".png", bbox_inches="tight")
+    print("Done.")

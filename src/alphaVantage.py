@@ -9,6 +9,7 @@ def send_request(args, stock_name):
     data = conn.getresponse().read().decode("utf-8")
     data = json.loads(data)
     if "Note" in data:
+        print("Waiting for key being available")
         sleep(61)
         return send_request(args, stock_name)
     return data
@@ -36,6 +37,7 @@ def get_stock_data_daily(stock_name):
 
 
 def get_stock_data(stock_name, time):
+    print("Downloading stock data of: " + stock_name + "...")
     if time.endswith("H"):
         data = get_stock_data_hourly(stock_name)
     else:
@@ -44,6 +46,7 @@ def get_stock_data(stock_name, time):
         time = int(time[:-1])
         indexes = list(data)[:time]
         data = dict((k, data[k]) for k in indexes)
+        print("Done")
         return data
     return ""
 

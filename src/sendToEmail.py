@@ -9,6 +9,7 @@ from configparser import ConfigParser
 
 
 def send_to_email(receiver, filename):
+    print("Sending email...")
     if len(receiver) == 0:
         return
     parser = ConfigParser()
@@ -19,7 +20,8 @@ def send_to_email(receiver, filename):
     message["To"] = receiver
     message["Subject"] = "Report " + filename
 
-    message.attach(MIMEText("This report was Created at " + datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S"), "plain"))
+    message.attach(
+        MIMEText("This report was Created at " + datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S"), "plain"))
     filename = filename
     with open(filename, "rb") as attachment:
         part = MIMEBase("application", "octet-stream")
@@ -33,6 +35,10 @@ def send_to_email(receiver, filename):
 
     message.attach(part)
     context = ssl.create_default_context()
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
-        server.login("cedric.ringger.dev@gmail.com", parser.get("Gmail SMTP", "password"))
-        server.sendmail(sender, receiver, message.as_string())
+    try:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+            server.login("cedric.ringger.dev@gmail.com", parser.get("Gmail SMTP", "password"))
+            server.sendmail(sender, receiver, message.as_string())
+    except:
+        print("Failed to send Mail")
+    print("Done")

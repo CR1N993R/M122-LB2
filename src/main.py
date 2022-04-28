@@ -3,11 +3,11 @@ import os
 import sys
 from fpdf import FPDF
 
-from src.alphaVantage import get_stock_data, get_description
-from src.ftp import upload
-from src.graphGenerator import create_graph
-from src.report import generate_new_page
-from src.sendToEmail import send_to_email
+from alphaVantage import get_stock_data, get_description
+from ftp import upload
+from graphGenerator import create_graph
+from report import generate_new_page
+from sendToEmail import send_to_email
 
 timePeriod = ""
 stockName = ""
@@ -74,6 +74,7 @@ def main():
     if check_args():
         pdf = FPDF()
         companies = stockName.split(",")
+        print("Generating report...")
         for company in companies:
             data = get_stock_data(company, timePeriod)
             info = get_description(company)
@@ -81,6 +82,7 @@ def main():
                 create_graph(data, company)
                 generate_new_page(pdf, info["Description"], company, info["Name"], rising(data), get_percentage(data), get_diff(data))
                 os.remove(company + ".png")
+        print("Done. Generating report")
         time = datetime.datetime.now()
         filename = time.strftime("%d-%m-%Y %H_%M_%S")
         filename = filename + " " + stockName + ".pdf"

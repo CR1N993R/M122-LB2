@@ -1,4 +1,5 @@
 def generate_new_page(pdf, text, stock_name, name, rising, percentage, diff):
+    print("Adding new page for " + stock_name + "...")
     pdf.add_page()
     pdf.set_xy(0, 20)
     pdf.set_font("arial", "B", 26)
@@ -22,4 +23,5 @@ def generate_new_page(pdf, text, stock_name, name, rising, percentage, diff):
     pdf.multi_cell(170, 5, text)
     pdf.cell(20, 10, "", 0, 2)
     pdf.image(stock_name + ".png", x=20, y=None, w=170, h=100, type="", link="")
+    print("Done")
 
