@@ -31,4 +31,5 @@ Navigate into the src directory and run the following commands
 | -u       | FTP username            |    False |
 | -s       | FTP server address      |    False |
 | -p       | FTP password            |    False |
+| -P       | FTP server port         |    False |
 | -e       | Email Address           |    False |

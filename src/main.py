@@ -15,6 +15,7 @@ email = ""
 ftpUser = ""
 ftpAddress = ""
 ftpPassword = ""
+ftpPort = 22
 
 
 def check_args():
@@ -63,6 +64,9 @@ def main():
         elif arg == "-s":
             global ftpAddress
             ftpAddress = sys.argv[index + 1]
+        elif arg == "-P":
+            global ftpPort
+            ftpPort = sys.argv[index + 1]
         elif arg == "-p":
             global ftpPassword
             ftpPassword = sys.argv[index + 1]
@@ -87,7 +91,7 @@ def main():
         filename = time.strftime("%d-%m-%Y %H_%M_%S")
         filename = filename + " " + stockName + ".pdf"
         pdf.output(filename, "F")
-        upload(filename, ftpAddress, ftpUser, ftpPassword)
+        upload(filename, ftpAddress, ftpUser, ftpPassword, ftpPort)
         send_to_email(email, filename)
 
 
