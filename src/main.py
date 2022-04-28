@@ -1,8 +1,10 @@
+import datetime
 import os
 import sys
 from fpdf import FPDF
 
 from src.alphaVantage import get_stock_data, get_description
+from src.ftp import upload
 from src.graphGenerator import create_graph
 from src.report import generate_new_page
 
@@ -11,7 +13,6 @@ stockName = ""
 email = ""
 ftpUser = ""
 ftpAddress = ""
-ftpPort = 0
 ftpPassword = ""
 
 
@@ -62,9 +63,6 @@ def main():
             global ftpAddress
             ftpAddress = sys.argv[index + 1]
         elif arg == "-p":
-            global ftpPort
-            ftpPort = sys.argv[index + 1]
-        elif arg == "-P":
             global ftpPassword
             ftpPassword = sys.argv[index + 1]
         else:
@@ -82,7 +80,11 @@ def main():
                 create_graph(data)
                 generate_new_page(pdf, info["Description"], company, info["Name"], rising(data), get_percentage(data), get_diff(data))
         os.remove("stock.png")
-        pdf.output("report.pdf", "F")
+        time = datetime.datetime.now()
+        filename = time.strftime("%d-%m-%Y %H_%M_%S")
+        filename = filename + " " + stockName + ".pdf"
+        pdf.output(filename, "F")
+        upload(filename, ftpAddress, ftpUser, ftpPassword)
 
 
 if __name__ == '__main__':
