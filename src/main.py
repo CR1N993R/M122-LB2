@@ -7,6 +7,7 @@ from src.alphaVantage import get_stock_data, get_description
 from src.ftp import upload
 from src.graphGenerator import create_graph
 from src.report import generate_new_page
+from src.sendToEmail import send_to_email
 
 timePeriod = ""
 stockName = ""
@@ -85,6 +86,7 @@ def main():
         filename = filename + " " + stockName + ".pdf"
         pdf.output(filename, "F")
         upload(filename, ftpAddress, ftpUser, ftpPassword)
+        send_to_email(email, filename)
 
 
 if __name__ == '__main__':
