@@ -77,9 +77,9 @@ def main():
             data = get_stock_data(company, timePeriod)
             info = get_description(company)
             if len(info) > 0 and len(data) > 0:
-                create_graph(data)
+                create_graph(data, company)
                 generate_new_page(pdf, info["Description"], company, info["Name"], rising(data), get_percentage(data), get_diff(data))
-        os.remove("stock.png")
+                os.remove(company + ".png")
         time = datetime.datetime.now()
         filename = time.strftime("%d-%m-%Y %H_%M_%S")
         filename = filename + " " + stockName + ".pdf"

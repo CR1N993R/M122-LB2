@@ -21,5 +21,5 @@ def generate_new_page(pdf, text, stock_name, name, rising, percentage, diff):
     pdf.cell(20, 16, "", 0, 2)
     pdf.multi_cell(170, 5, text)
     pdf.cell(20, 10, "", 0, 2)
-    pdf.image("stock.png", x=20, y=None, w=170, h=100, type="", link="")
+    pdf.image(stock_name + ".png", x=20, y=None, w=170, h=100, type="", link="")
 

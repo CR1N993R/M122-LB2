@@ -2,13 +2,14 @@ import pandas as pd
 import matplotlib
 import matplotlib.pyplot as plt
 
+
 def print_bars(plt, index, close, high, low, open, stick1, stick2, body):
     plt.bar(index, close - open, .4, bottom=open, color=body)
     plt.bar(index, high - stick1, .05, bottom=stick1, color="black")
     plt.bar(index, low - stick2, .05, bottom=stick2, color="black")
 
 
-def create_graph(data):
+def create_graph(data, company):
     prices = pd.DataFrame.from_dict(data, "index")
     prices["1. open"] = prices["1. open"].astype(float)
     prices["2. high"] = prices["2. high"].astype(float)
@@ -28,4 +29,4 @@ def create_graph(data):
     fig = matplotlib.pyplot.gcf()
     fig.set_size_inches(17, 10)
 
-    plt.savefig("stock.png", bbox_inches="tight")
+    plt.savefig(company + ".png", bbox_inches="tight")
