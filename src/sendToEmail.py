@@ -1,5 +1,6 @@
 import base64
 import datetime
+import json
 
 import requests
 
@@ -19,5 +20,8 @@ def send_to_email(receiver, filename):
     headers = {'api_key': "0fb8a6e67439229ac3cc9ded737d017b", 'content-type': "application/json"}
 
     response = requests.request("POST", url, data=payload, headers=headers)
-
-    print(response.text)
+    data = json.loads(response.text)
+    if "error" in data:
+        print("Sending Email failed")
+        return
+    print("Done...")
