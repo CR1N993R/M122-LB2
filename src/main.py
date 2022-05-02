@@ -12,10 +12,21 @@ from sendToEmail import send_to_email
 timePeriod = ""
 stockName = ""
 email = ""
+localPath = ""
 ftpUser = ""
 ftpAddress = ""
 ftpPassword = ""
 ftpPort = 22
+ftpPath = ""
+
+
+def add_slash():
+    global ftpPath
+    global localPath
+    if localPath.endswith("/"):
+        localPath = localPath[:-1]
+    if ftpPath.endswith("/"):
+        ftpPath = ftpPath[:-1]
 
 
 def check_args():
@@ -70,11 +81,18 @@ def main():
         elif arg == "-p":
             global ftpPassword
             ftpPassword = sys.argv[index + 1]
+        elif arg == "-l":
+            global localPath
+            localPath = sys.argv[index + 1]
+        elif arg == "-L":
+            global ftpPath
+            ftpPath = sys.argv[index + 1]
         else:
             if arg.startswith("-"):
                 print("Unknown Option " + arg)
                 exit(-1)
 
+    add_slash()
     if check_args():
         pdf = FPDF()
         companies = stockName.split(",")
@@ -83,16 +101,24 @@ def main():
             data = get_stock_data(company, timePeriod)
             info = get_description(company)
             if len(info) > 0 and len(data) > 0:
-                create_graph(data, company)
-                generate_new_page(pdf, info["Description"], company, info["Name"], rising(data), get_percentage(data), get_diff(data))
+                create_graph(data, company, timePeriod.lower().endswith("d"))
+                generate_new_page(pdf, info["Description"], company, info["Name"], rising(data), get_percentage(data),
+                                  get_diff(data))
                 os.remove(company + ".png")
         print("Done. Generating report")
         time = datetime.datetime.now()
         filename = time.strftime("%d-%m-%Y %H_%M_%S")
         filename = filename + " " + stockName + ".pdf"
-        pdf.output(filename, "F")
-        upload(filename, ftpAddress, ftpUser, ftpPassword, ftpPort)
-        send_to_email(email, filename)
+        if len(localPath) > 0:
+            if not os.path.exists(localPath):
+                os.makedirs(localPath)
+            localPath = localPath + "/" + filename
+        else:
+            localPath = filename
+
+        pdf.output(localPath, "F")
+        upload(filename, localPath, ftpAddress, ftpUser, ftpPassword, ftpPort, ftpPath)
+        send_to_email(email, localPath)
 
 
 if __name__ == '__main__':
