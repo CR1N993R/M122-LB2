@@ -38,7 +38,7 @@ def get_stock_data_daily(stock_name):
 
 def get_stock_data(stock_name, time):
     print("Downloading stock data of: " + stock_name + "...")
-    if time.endswith("H"):
+    if time.lower().endswith("h"):
         data = get_stock_data_hourly(stock_name)
     else:
         data = get_stock_data_daily(stock_name)
