@@ -1,44 +1,23 @@
+import base64
 import datetime
-import smtplib
-import ssl
-from email import encoders
-from email.mime.base import MIMEBase
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from configparser import ConfigParser
+
+import requests
 
 
 def send_to_email(receiver, filename):
-    print("Sending email...")
     if len(receiver) == 0:
+        print("Email Skipped")
         return
-    parser = ConfigParser()
-    parser.read("../config.ini")
-    sender = parser.get("Gmail SMTP", "email")
-    message = MIMEMultipart()
-    message["From"] = sender
-    message["To"] = receiver
-    message["Subject"] = "Report " + filename
+    print("Sending email...")
 
-    message.attach(
-        MIMEText("This report was Created at " + datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S"), "plain"))
-    filename = filename
-    with open(filename, "rb") as attachment:
-        part = MIMEBase("application", "octet-stream")
-        part.set_payload(attachment.read())
-    encoders.encode_base64(part)
+    data = open(filename, "rb").read()
+    encoded = base64.b64encode(data)
 
-    part.add_header(
-        "Content-Disposition",
-        f"attachment; filename= {filename}",
-    )
+    url = "https://emailapi.netcorecloud.net/v5/mail/send"
 
-    message.attach(part)
-    context = ssl.create_default_context()
-    try:
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
-            server.login("cedric.ringger.dev@gmail.com", parser.get("Gmail SMTP", "password"))
-            server.sendmail(sender, receiver, message.as_string())
-    except:
-        print("Failed to send Mail")
-    print("Done")
+    payload = '{"from": {"email": "cedricringger@pepisandbox.com","name": "cedricringger"},"subject": "Report ' + filename + '","content": [{"type": "html","value": "This report was Created at ' + datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + '"}],"attachments":[{"content": "' + encoded.decode("utf-8") + '","type": "application/pdf"}],"personalizations": [{"to": [{"email": "' + receiver + '","name": "Lionel Messi"}]}]}'
+    headers = {'api_key': "0fb8a6e67439229ac3cc9ded737d017b", 'content-type': "application/json"}
+
+    response = requests.request("POST", url, data=payload, headers=headers)
+
+    print(response.text)
