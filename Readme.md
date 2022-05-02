@@ -13,9 +13,6 @@ Afterwards these can be sent to an FTP Server or an Email address
   - matplotlib (Creating stock plots)
   - pysftp (Upload to FTP server)
 
-## Setup
-If you want to send emails you have to enter your gmail information into the config file.
-
 ## Running the Application
 Navigate into the src directory and run the following commands
 ### Windows
@@ -28,8 +25,10 @@ Navigate into the src directory and run the following commands
 |:---------|:------------------------|---------:|
 | -t       | Time e.g. (20H or 10D)  |     True |
 | -a       | Stock names(AAPL,GOOGL) |     True |
+| -l       | Local Path              |    False |
 | -u       | FTP username            |    False |
 | -s       | FTP server address      |    False |
 | -p       | FTP password            |    False |
 | -P       | FTP server port         |    False |
 | -e       | Email Address           |    False |
+| -L       | FTP Path                |    False |
